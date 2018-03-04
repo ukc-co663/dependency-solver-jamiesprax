@@ -23,7 +23,7 @@ public class Repository {
     }
 
     public Dependency getDependency(DependencyRef ref) {
-            return dependencies.get(ref);
+            return dependencies.get(ref.getVersion() == null ? resolveRef(ref) : ref);
     }
 
     public DependencyRef resolveRef(DependencyRef ref) {

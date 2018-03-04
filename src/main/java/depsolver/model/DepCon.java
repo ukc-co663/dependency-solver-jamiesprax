@@ -2,6 +2,8 @@ package depsolver.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
+import static java.lang.String.format;
+
 public class DepCon {
 
     private final Constraint constraint;

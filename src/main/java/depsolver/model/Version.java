@@ -33,41 +33,41 @@ public class Version {
     /**
      * Returns true if v1 is a lesser version than v2
      */
-    public static boolean isLessThan(Version v1, Version v2) {
-        return !isGreaterThan(v1,v2) && !v1.equals(v2);
+    public boolean isLessThan(Version v) {
+        return !this.isGreaterThan(v) && !this.equals(v);
     }
 
     /**
      * Returns true if v1 is a greater version than v2
      */
-    public static boolean isGreaterThan(Version v1, Version v2) {
-        if (v1.getMajor() > v2.getMajor()) {
+    public boolean isGreaterThan(Version v) {
+        if (major > v.getMajor()) {
             return true;
-        } else if (v1.getMajor() < v2.getMajor()) {
+        } else if (major < v.getMajor()) {
             return false;
         }
 
         // cases where v1 major == v2 major
-        if (v1.getMinor() != null) {
-            if (v2.getMinor() == null) {
+        if (minor != null) {
+            if (v.getMinor() == null) {
                 return true;
             } else {
-                if (stringVerIsGreaterThan(v1.getMinor(), v2.getMinor())) {
+                if (stringVerIsGreaterThan(minor, v.getMinor())) {
                     return true;
-                } else if (stringVerIsLessThan(v1.getMinor(), v2.getMinor())) {
+                } else if (stringVerIsLessThan(minor, v.getMinor())) {
                     return false;
                 }
             }
         }
 
         // cases where v1 minor == v2 minor
-        if (v1.getSub() != null) {
-            if (v2.getSub() == null) {
+        if (sub != null) {
+            if (v.getSub() == null) {
                 return true;
             } else {
-                if (stringVerIsGreaterThan(v1.getSub(), v2.getSub())) {
+                if (stringVerIsGreaterThan(sub, v.getSub())) {
                     return true;
-                } else if (stringVerIsLessThan(v1.getSub(), v2.getSub())) {
+                } else if (stringVerIsLessThan(sub, v.getSub())) {
                     return false;
                 }
             }
@@ -79,7 +79,7 @@ public class Version {
     /**
      * Returns true if m1 is greater than m2
      */
-    private static boolean stringVerIsGreaterThan(String m1, String m2) {
+    private boolean stringVerIsGreaterThan(String m1, String m2) {
         try {
             for (int i = 0; i < m1.length(); i++) {
                 if (m1.charAt(i) > m2.charAt(i)) {
@@ -97,7 +97,7 @@ public class Version {
     /**
      * Returns true if m1 is less than m2
      */
-    private static boolean stringVerIsLessThan(String m1, String m2) {
+    private boolean stringVerIsLessThan(String m1, String m2) {
         try {
             for (int i = 0; i < m1.length(); i++) {
                 if (m1.charAt(i) < m2.charAt(i)) {

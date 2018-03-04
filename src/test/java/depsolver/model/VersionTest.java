@@ -15,9 +15,9 @@ public class VersionTest {
         Version v3 = Version.create("100");
         Version v4 = Version.create("56");
 
-        assertTrue(Version.isGreaterThan(v1, v2));
-        assertFalse(Version.isGreaterThan(v4, v3));
-        assertFalse(Version.isGreaterThan(v1, v1));
+        assertTrue(v1.isGreaterThan(v2));
+        assertFalse(v4.isGreaterThan(v3));
+        assertFalse(v1.isGreaterThan(v1));
     }
 
     @Test
@@ -28,9 +28,9 @@ public class VersionTest {
         Version v3 = Version.create("100.7");
         Version v4 = Version.create("100.07");
 
-        assertTrue(Version.isGreaterThan(v1, v2));
-        assertFalse(Version.isGreaterThan(v4, v3));
-        assertFalse(Version.isGreaterThan(v1, v1));
+        assertTrue(v1.isGreaterThan(v2));
+        assertFalse(v4.isGreaterThan(v3));
+        assertFalse(v1.isGreaterThan(v1));
     }
 
     @Test
@@ -41,9 +41,9 @@ public class VersionTest {
         Version v3 = Version.create("100.07.01");
         Version v4 = Version.create("100.07.005");
 
-        assertTrue(Version.isGreaterThan(v1, v2));
-        assertFalse(Version.isGreaterThan(v4, v3));
-        assertFalse(Version.isGreaterThan(v1, v1));
+        assertTrue(v1.isGreaterThan(v2));
+        assertFalse(v4.isGreaterThan(v3));
+        assertFalse(v1.isGreaterThan(v1));
     }
 
 }

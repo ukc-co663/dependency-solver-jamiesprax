@@ -37,6 +37,12 @@ public class State {
         });
     }
 
+    public Set<DependencyRef> getAllInstalledVersions(DependencyRef ref) {
+        return installed.stream()
+                .filter(r -> r.getName().equals(ref.getName()))
+                .collect(Collectors.toSet());
+    }
+
     public boolean isInstalled(Dependency dep) {
         return installed.contains(dep.toRef());
     }
