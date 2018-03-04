@@ -13,7 +13,6 @@ public class Main {
 
         Repository repository = MAPPER.readValue(new File(args[0]), Repository.class);
 
-        //TODO : Fix packages not existing when more than 1 used in classpath
         //TODO : Complete parsing of complete repository
         //TODO : Parse initial repository
         //TODO : Parse constraints
