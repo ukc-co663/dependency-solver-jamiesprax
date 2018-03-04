@@ -16,8 +16,6 @@ public class Main {
         Repository repository = MAPPER.readValue(new File(args[0]), Repository.class);
         State state = State.create(MAPPER.readValue(new File(args[1]), List.class));
 
-
-        //TODO : Parse constraints
         //TODO : Write state validator
         //TODO : Write state creation algorithm
         //TODO : Produce commands

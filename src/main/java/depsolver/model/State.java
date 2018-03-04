@@ -25,17 +25,39 @@ public class State {
         );
     }
 
-    public boolean isIntalled(String name) {
-        return installed.contains(name);
+    public void applyConstraints(List<Command> commands) {
+        commands.forEach(c -> {
+            if (c.getType() == Command.Type.INSTALL && !isInstalled(c.getRef())) {
+                install(c.getRef());
+            } else {
+                if (isInstalled(c.getRef())) {
+                    uninstall(c.getRef());
+                }
+            }
+        });
+    }
+
+    public boolean isInstalled(Dependency dep) {
+        return installed.contains(dep.toRef());
+    }
+
+    public boolean isInstalled(DependencyRef ref) {
+        return installed.contains(ref);
     }
 
     public void install(Dependency dep) {
         installed.add(dep.toRef());
     }
 
+    public void install(DependencyRef ref) {
+        installed.add(ref);
+    }
+
     public void uninstall(Dependency dep) {
         installed.remove(dep.toRef());
     }
 
-
+    public void uninstall(DependencyRef ref) {
+        installed.remove(ref);
+    }
 }
