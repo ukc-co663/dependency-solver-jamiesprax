@@ -28,5 +28,6 @@ public class Main {
         String[] allCommands = (String[]) commands.stream().map(Command::toString).toArray();
         System.out.println(allCommands);
 
+        //TODO: State validator does not respect >, >=, <, <= yet when checking conflict/dependent versions
     }
 }
