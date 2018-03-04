@@ -1,5 +1,7 @@
 package depsolver.model;
 
+import static java.lang.String.format;
+
 public class DependencyRef {
 
     private final String name;
@@ -21,6 +23,14 @@ public class DependencyRef {
 
     public String getVersion() {
         return version;
+    }
+
+    public Command toInstallCmd() {
+        return Command.create(format("+%s=%s", name, version));
+    }
+
+    public Command toUninstallCmd() {
+        return Command.create(format("-%s=%s", name, version));
     }
 
     @Override

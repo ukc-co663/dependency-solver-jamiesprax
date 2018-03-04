@@ -19,14 +19,14 @@ public class Main {
         Arrays.stream(args).forEach(System.out::println);
 
         Repository repository = MAPPER.readValue(new File(args[0]), Repository.class);
-        State state = State.create(MAPPER.readValue(new File(args[1]), List.class));
+        State state = State.create(MAPPER.readValue(new File(args[1]), List.class), repository);
         List<String> cmds = MAPPER.readValue(new File(args[2]), List.class);
 
         List<Command> commands = cmds.stream().map(Command::create).collect(Collectors.toList());
-        state.applyConstraints(commands, repository);
+        state.applyCommands(commands);
 
-        //TODO : Write state validator
-        //TODO : Write state creation algorithm
-        //TODO : Produce commands
+        String[] allCommands = (String[]) commands.stream().map(Command::toString).toArray();
+        System.out.println(allCommands);
+
     }
 }

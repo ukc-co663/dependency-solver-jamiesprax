@@ -2,12 +2,23 @@ package depsolver.model;
 
 import static depsolver.model.Command.Type.INSTALL;
 import static depsolver.model.Command.Type.UNINSTALL;
+import static java.lang.String.format;
 
 public class Command {
 
     public enum Type {
-        INSTALL,
-        UNINSTALL
+        INSTALL("+"),
+        UNINSTALL("-")
+        ;
+
+        private String sign;
+        Type(String sign) {
+            this.sign = sign;
+        }
+
+        public String getSign() {
+            return sign;
+        }
     }
 
     private final Type type;
@@ -31,5 +42,10 @@ public class Command {
 
     public DependencyRef getRef() {
         return ref;
+    }
+
+    @Override
+    public String toString() {
+        return format("%s%s=%s", type.getSign(), ref.getName(), ref.getVersion());
     }
 }

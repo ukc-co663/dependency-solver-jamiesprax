@@ -37,4 +37,16 @@ public class DepCon {
     public Version getVersion() {
         return version;
     }
+
+    public DependencyRef toRef() {
+        return DependencyRef.create(format("%s=%s", name, version));
+    }
+
+    public Command toInstallCmd() {
+        return Command.create(format("+%s=%s", name, version));
+    }
+
+    public Command toUninstallCmd() {
+        return Command.create(format("-%s=%s", name, version));
+    }
 }

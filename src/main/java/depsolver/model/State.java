@@ -1,37 +1,45 @@
 package depsolver.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class State {
 
+    private final List<Command> commands;
     private final Set<DependencyRef> installed;
+    private final Repository repo;
+    private final StateValidator validator;
 
-    private State(Set<DependencyRef> installed) {
+    private State(Set<DependencyRef> installed, Repository repo) {
+        this.commands = new ArrayList<>();
         this.installed = installed;
+        this.repo = repo;
+        this.validator = StateValidator.create(repo, this);
     }
 
-    @JsonCreator
     public static State create(
-            List<String> deps
+            List<String> deps,
+            Repository repo
     ) {
         return new State(
                 deps.stream()
                         .map(DependencyRef::create)
-                        .collect(Collectors.toSet())
+                        .collect(Collectors.toSet()),
+                repo
         );
     }
 
-    public void applyConstraints(List<Command> commands, Repository repo) {
+    public void applyCommands(List<Command> commands) {
         commands.forEach(c -> {
-            if (c.getType() == Command.Type.INSTALL && !isInstalled(c.getRef(), repo)) {
-                install(c.getRef(), repo);
-            } else {
-                if (isInstalled(c.getRef(), repo)) {
-                    uninstall(c.getRef());
+            if (validator.canDo(c)) {
+                if (c.getType() == Command.Type.INSTALL && !isInstalled(c.getRef())) {
+                    install(c.getRef());
+                } else {
+                    if (isInstalled(c.getRef())) {
+                        uninstall(c.getRef());
+                    }
                 }
             }
         });
@@ -43,11 +51,15 @@ public class State {
                 .collect(Collectors.toSet());
     }
 
-    public boolean isInstalled(Dependency dep) {
-        return installed.contains(dep.toRef());
+    public List<Command> getCommands() {
+        return commands;
     }
 
-    public boolean isInstalled(DependencyRef ref, Repository repo) {
+    public boolean isInstalled(Dependency dep) {
+        return isInstalled(dep.toRef());
+    }
+
+    public boolean isInstalled(DependencyRef ref) {
         if (ref.getVersion() == null) {
             return installed.contains(repo.resolveRef(ref));
         } else {
@@ -56,22 +68,33 @@ public class State {
     }
 
     public void install(Dependency dep) {
-        installed.add(dep.toRef());
+        install(dep.toRef());
     }
 
-    public void install(DependencyRef ref, Repository repo) {
+    public void install(DependencyRef ref) {
+        DependencyRef iRef = ref;
         if (ref.getVersion() == null) {
-            installed.add(repo.resolveRef(ref));
-        } else {
-            installed.add(ref);
+            iRef = repo.resolveRef(ref);
         }
+
+        installed.add(iRef);
+        commands.add(iRef.toInstallCmd());
     }
 
     public void uninstall(Dependency dep) {
-        installed.remove(dep.toRef());
+        uninstall(dep.toRef());
     }
 
     public void uninstall(DependencyRef ref) {
-        installed.remove(ref);
+        DependencyRef uRef = ref;
+        if (ref.getVersion() == null) {
+            uRef = repo.resolveRef(ref);
+        }
+        installed.remove(uRef);
+        commands.add(uRef.toUninstallCmd());
+    }
+
+    public State copy() {
+        return new State(installed, repo);
     }
 }
