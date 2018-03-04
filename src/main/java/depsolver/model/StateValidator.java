@@ -1,6 +1,7 @@
 package depsolver.model;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class StateValidator {
@@ -20,7 +21,7 @@ public class StateValidator {
     public boolean canDo(Command command) {
         Dependency dep = repo.getDependency(command.getRef());
 
-        if (dep.getConflicts() != null) {
+        if (!dep.getConflicts().isEmpty()) {
             List<DepCon> installedConflicts = dep.getConflicts().stream()
                     .filter(c -> state.isInstalled(c.toRef()))
                     .collect(Collectors.toList());
@@ -58,7 +59,10 @@ public class StateValidator {
             }
         }
 
-        if (dep.getDependencies() != null) {
+        // Partial impl. Doesn't work. Idea was to search through non singleton lists of depends
+        // and check recursivly which ones could be installed without conflicts further down the path.
+        // Issue was with > < >= <= on depends
+        if (!dep.getDependencies().isEmpty()) {
             for (List<DepCon> depList : dep.getDependencies()) {
                 List<DepCon> requiredDeps = depList.stream()
                         .filter(d -> !state.isInstalled(d.toRef()))
@@ -75,7 +79,6 @@ public class StateValidator {
                 }
             }
         }
-
         return true;
     }
 }

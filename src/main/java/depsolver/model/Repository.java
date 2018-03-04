@@ -26,9 +26,16 @@ public class Repository {
             return dependencies.get(ref.getVersion() == null ? resolveRef(ref) : ref);
     }
 
+    // resolve any version of ref
     public DependencyRef resolveRef(DependencyRef ref) {
+        List<DependencyRef> all = getAllVersionsOf(ref);
+        return all.isEmpty() ? ref : all.get(0);
+    }
+
+    // resolve all versions of ref
+    public List<DependencyRef> getAllVersionsOf(DependencyRef ref) {
         return dependencies.keySet().stream()
-                .filter(r -> r.getName().equals(ref.getName()))
-                .findFirst().orElse(ref);
+                .filter(r -> r.getName().endsWith(ref.getName()))
+                .collect(Collectors.toList());
     }
 }
