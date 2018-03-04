@@ -94,6 +94,9 @@ public class Version {
         }
     }
 
+    /**
+     * Returns true if m1 is less than m2
+     */
     private static boolean stringVerIsLessThan(String m1, String m2) {
         try {
             for (int i = 0; i < m1.length(); i++) {
@@ -129,5 +132,17 @@ public class Version {
         result = 31 * result + (minor != null ? minor.hashCode() : 0);
         result = 31 * result + (sub != null ? sub.hashCode() : 0);
         return result;
+    }
+
+    @Override public String toString() {
+        StringBuilder str = new StringBuilder(major);
+        if (minor != null) {
+            str.append(".").append(minor);
+            if (sub != null) {
+                str.append(".").append(sub);
+            }
+        }
+
+        return str.toString();
     }
 }
