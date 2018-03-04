@@ -2,7 +2,6 @@ package depsolver;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import depsolver.model.Command;
-import depsolver.model.DependencyRef;
 import depsolver.model.Repository;
 import depsolver.model.State;
 
