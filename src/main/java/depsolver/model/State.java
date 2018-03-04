@@ -25,12 +25,12 @@ public class State {
         );
     }
 
-    public void applyConstraints(List<Command> commands) {
+    public void applyConstraints(List<Command> commands, Repository repo) {
         commands.forEach(c -> {
-            if (c.getType() == Command.Type.INSTALL && !isInstalled(c.getRef())) {
-                install(c.getRef());
+            if (c.getType() == Command.Type.INSTALL && !isInstalled(c.getRef(), repo)) {
+                install(c.getRef(), repo);
             } else {
-                if (isInstalled(c.getRef())) {
+                if (isInstalled(c.getRef(), repo)) {
                     uninstall(c.getRef());
                 }
             }
@@ -41,16 +41,24 @@ public class State {
         return installed.contains(dep.toRef());
     }
 
-    public boolean isInstalled(DependencyRef ref) {
-        return installed.contains(ref);
+    public boolean isInstalled(DependencyRef ref, Repository repo) {
+        if (ref.getVersion() == null) {
+            return installed.contains(repo.resolveRef(ref));
+        } else {
+            return installed.contains(ref);
+        }
     }
 
     public void install(Dependency dep) {
         installed.add(dep.toRef());
     }
 
-    public void install(DependencyRef ref) {
-        installed.add(ref);
+    public void install(DependencyRef ref, Repository repo) {
+        if (ref.getVersion() == null) {
+            installed.add(repo.resolveRef(ref));
+        } else {
+            installed.add(ref);
+        }
     }
 
     public void uninstall(Dependency dep) {

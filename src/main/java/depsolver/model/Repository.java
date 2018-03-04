@@ -23,6 +23,12 @@ public class Repository {
     }
 
     public Dependency getDependency(DependencyRef ref) {
-        return dependencies.get(ref);
+            return dependencies.get(ref);
+    }
+
+    public DependencyRef resolveRef(DependencyRef ref) {
+        return dependencies.keySet().stream()
+                .filter(r -> r.getName().equals(ref.getName()))
+                .findFirst().orElse(ref);
     }
 }

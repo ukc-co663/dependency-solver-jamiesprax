@@ -39,9 +39,9 @@ public class Dependency {
             @JsonProperty("conflicts") List<String> conflicts,
             @JsonProperty("depends") List<List<String>> dependencies
     ) {
-        List<List<DepCon>> depCons = new ArrayList<>();
-        if (!dependencies.isEmpty()) {
-            depCons = dependencies.stream()
+        List<List<DepCon>> deps = new ArrayList<>();
+        if (dependencies != null && !dependencies.isEmpty()) {
+            deps = dependencies.stream()
                     .map(l -> l.stream()
                             .map(DepCon::create)
                             .collect(Collectors.toList())
@@ -49,12 +49,17 @@ public class Dependency {
                     .collect(Collectors.toList());
         }
 
+        List<DepCon> confs = new ArrayList<>();
+        if (conflicts != null && !conflicts.isEmpty()) {
+            confs = conflicts.stream().map(DepCon::create).collect(Collectors.toList());
+        }
+
         return new Dependency(
                 name,
                 size,
                 Version.create(version),
-                conflicts.stream().map(DepCon::create).collect(Collectors.toList()),
-                depCons
+                confs,
+                deps
         );
     }
 

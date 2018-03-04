@@ -112,7 +112,8 @@ public class Version {
         }
     }
 
-    @Override public boolean equals(Object o) {
+    @Override
+    public boolean equals(Object o) {
         if (this == o)
             return true;
         if (o == null || getClass() != o.getClass())
@@ -127,22 +128,23 @@ public class Version {
         return sub != null ? sub.equals(version.sub) : version.sub == null;
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         int result = major.hashCode();
         result = 31 * result + (minor != null ? minor.hashCode() : 0);
         result = 31 * result + (sub != null ? sub.hashCode() : 0);
         return result;
     }
 
-    @Override public String toString() {
-        StringBuilder str = new StringBuilder(major);
+    @Override
+    public String toString() {
+        StringBuilder str = new StringBuilder(major.toString());
         if (minor != null) {
             str.append(".").append(minor);
             if (sub != null) {
                 str.append(".").append(sub);
             }
         }
-
         return str.toString();
     }
 }
