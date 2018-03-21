@@ -20,7 +20,7 @@ public class Main {
         String filepathToSave = args[0].replace("repository", "commands");
         File file = new File(filepathToSave);
 
-        Arrays.stream(args).forEach(System.out::println);
+        if (false) Arrays.stream(args).forEach(System.out::println);
 
         Repository repository = MAPPER.readValue(new File(args[0]), Repository.class);
         State state = State.create(MAPPER.readValue(new File(args[1]), List.class), repository);
@@ -41,12 +41,12 @@ public class Main {
             }
         }
 
-        try (FileWriter wr = new FileWriter(file)) {
+        //try (FileWriter wr = new FileWriter(file)) {
             List<String> strCmds = state.getCommands().stream()
                     .map(Command::toString)
                     .collect(Collectors.toList());
 
-            wr.write(strCmds.toString());
-        }
+            System.out.println(strCmds.toString());
+        //}
     }
 }

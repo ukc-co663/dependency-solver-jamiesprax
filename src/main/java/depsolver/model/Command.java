@@ -46,6 +46,6 @@ public class Command {
 
     @Override
     public String toString() {
-        return format("%s%s=%s", type.getSign(), ref.getName(), ref.getVersion());
+        return format("\"%s%s=%s\"", type.getSign(), ref.getName(), ref.getVersion());
     }
 }
